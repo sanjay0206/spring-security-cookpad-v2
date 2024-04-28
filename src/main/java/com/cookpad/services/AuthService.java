@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 public interface AuthService {
 
-    UserDto register (UserDto UserDto);
+    UserDto register (UserDto userDto);
 
     String logout (HttpServletRequest request, HttpServletResponse response);
 }

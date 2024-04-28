@@ -26,10 +26,10 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<UserDto> register (@RequestBody @Valid UserDto UserDto) {
+    public ResponseEntity<UserDto> register (@RequestBody @Valid UserDto userDto) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(authService.register(UserDto));
+                .body(authService.register(userDto));
     }
 
     @PostMapping(path = "/logout")

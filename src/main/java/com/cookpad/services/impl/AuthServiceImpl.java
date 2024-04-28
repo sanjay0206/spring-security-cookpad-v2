@@ -46,27 +46,20 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public UserDto register (UserDto UserDto) {
-        log.info("UserDto: "  + UserDto);
+    public UserDto register (UserDto userDto) {
+        log.info("UserDto: "  + userDto);
 
         // add check for username exists in database
-        if (userRepository.existsByUsername(UserDto.getUsername())) {
+        if (userRepository.existsByUsername(userDto.getUsername())) {
             throw new RecipeAPIException(HttpStatus.BAD_REQUEST, "Username is already exists!.");
         }
 
         // add check for email exists in database
-        if (userRepository.existsByEmail(UserDto.getEmail())) {
+        if (userRepository.existsByEmail(userDto.getEmail())) {
             throw new RecipeAPIException(HttpStatus.BAD_REQUEST, "Email is already exists!.");
         }
 
-        // create user object
-        User user = new User();
-        user.setUsername(UserDto.getUsername());
-        user.setEmail(UserDto.getEmail());
-        user.setPassword(passwordEncoder.encode(UserDto.getPassword()));
-        user.setGender(UserDto.getGender());
-
-        Set<Role> roles = UserDto.getRoles().stream()
+        Set<Role> roles = userDto.getRoles().stream()
                 .map(roleName -> {
                     if ("ADMIN".equals(roleName)) {
                         throw new RecipeAPIException(HttpStatus.BAD_REQUEST, "Cannot register with ADMIN role.");
@@ -76,6 +69,12 @@ public class AuthServiceImpl implements AuthService {
                 })
                 .collect(Collectors.toSet());
 
+        // create user object
+        User user = new User();
+        user.setUsername(userDto.getUsername());
+        user.setEmail(userDto.getEmail());
+        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        user.setGender(userDto.getGender());
         user.setRoles(roles);
         user.setCreatedAt(LocalDateTime.now());
 
