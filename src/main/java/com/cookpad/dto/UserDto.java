@@ -7,7 +7,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -19,6 +21,7 @@ public class UserDto {
     private String username;
 
     @NotEmpty(message = "Email should not be null or empty")
+    @Email
     private String email;
 
     @NotEmpty(message = "Password should not be null or empty")
@@ -27,5 +30,6 @@ public class UserDto {
 
     private Gender gender;
 
-    private Role role;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private Set<String> roles;
 }

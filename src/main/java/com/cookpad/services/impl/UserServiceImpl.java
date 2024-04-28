@@ -3,16 +3,21 @@ package com.cookpad.services.impl;
 import com.cookpad.dto.UserDto;
 import com.cookpad.entities.Role;
 import com.cookpad.entities.User;
+import com.cookpad.exceptions.RecipeAPIException;
 import com.cookpad.exceptions.ResourceNotFoundException;
+import com.cookpad.repositories.RoleRepository;
 import com.cookpad.repositories.UserRepository;
 import com.cookpad.services.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -20,12 +25,14 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final ModelMapper modelMapper;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, ModelMapper modelMapper) {
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, ModelMapper modelMapper) {
         this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
         this.modelMapper = modelMapper;
     }
@@ -53,27 +60,62 @@ public class UserServiceImpl implements UserService {
     public UserDto createUser(UserDto userDto) {
         log.info("userDto: "  + userDto);
 
-        userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
-        User savedUser = userRepository.save(mapToEntity(userDto));
+        // add check for username exists in database
+        if (userRepository.existsByUsername(userDto.getUsername())) {
+            throw new RecipeAPIException(HttpStatus.BAD_REQUEST, "Username is already exists!.");
+        }
+
+        // add check for email exists in database
+        if (userRepository.existsByEmail(userDto.getEmail())) {
+            throw new RecipeAPIException(HttpStatus.BAD_REQUEST, "Email is already exists!.");
+        }
+
+        // create user object
+        User user = new User();
+        user.setUsername(userDto.getUsername());
+        user.setEmail(userDto.getEmail());
+        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        user.setGender(userDto.getGender());
+
+        Set<Role> roles = userDto.getRoles().stream()
+                .map(roleName -> roleRepository.findByRoleName(roleName)
+                        .orElseThrow(() -> new RecipeAPIException(HttpStatus.BAD_REQUEST, roleName + " role is not found.")))
+                .collect(Collectors.toSet());
+        user.setRoles(roles);
+        user.setCreatedAt(LocalDateTime.now());
+
+        User savedUser = userRepository.save(user);
 
         return mapToDTO(savedUser);
     }
 
     @Override
     public UserDto updateUser(Long userId, UserDto userDto) {
-        log.info("useId: "  + userId);
+        log.info("userId: "  + userId);
         log.info("userDto: "  + userDto);
 
         User existingUser = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "userId", userId));
 
-        existingUser.setUsername(userDto.getUsername());
-        existingUser.setEmail(userDto.getEmail());
-        existingUser.setPassword(userDto.getPassword());
-        existingUser.setGender(userDto.getGender());
+        if (userDto.getUsername() != null)
+           existingUser.setUsername(userDto.getUsername());
 
-//        Role role = new Role(userDto.getRole());
-//        existingUser.setRoles(userDto.getUserRole());
+        if (userDto.getEmail() != null)
+            existingUser.setEmail(userDto.getEmail());
+
+        if (userDto.getPassword() != null)
+            existingUser.setPassword(userDto.getPassword());
+
+        if (userDto.getGender() != null)
+            existingUser.setGender(userDto.getGender());
+
+        Set<Role> roles = userDto.getRoles().stream()
+                .map(roleName -> roleRepository.findByRoleName(roleName)
+                        .orElseThrow(() -> new RecipeAPIException(HttpStatus.BAD_REQUEST, roleName + " role is not found.")))
+                .collect(Collectors.toSet());
+
+        if (!roles.isEmpty())
+            existingUser.setRoles(roles);
 
         return mapToDTO(userRepository.save(existingUser));
     }

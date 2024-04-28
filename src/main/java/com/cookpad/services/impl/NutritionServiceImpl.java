@@ -78,7 +78,9 @@ public class NutritionServiceImpl implements NutritionService {
             existingNutrition.setFiber(nutritionDto.getFiber());
         }
 
-       return mapToDTO(nutritionRepository.save(existingNutrition));
+        Nutrition updatedNutrition = nutritionRepository.save(existingNutrition);
+
+        return mapToDTO(updatedNutrition);
     }
 
     @Override

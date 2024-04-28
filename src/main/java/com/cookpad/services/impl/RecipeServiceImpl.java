@@ -118,8 +118,9 @@ public class RecipeServiceImpl implements RecipeService {
             existingRecipe.setCookingMethod(recipeDto.getCookingMethod());
         }
 
+        Recipe updatedRecipe = recipeRepository.save(existingRecipe);
 
-        return mapToDTO(recipeRepository.save(existingRecipe));
+        return mapToDTO(updatedRecipe);
     }
 
     @Override

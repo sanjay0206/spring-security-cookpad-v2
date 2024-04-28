@@ -14,6 +14,7 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RecipeDto {
+    private Long recipeId;
 
     @NotEmpty(message = "Recipe name should not be null or empty")
     private String recipeName;

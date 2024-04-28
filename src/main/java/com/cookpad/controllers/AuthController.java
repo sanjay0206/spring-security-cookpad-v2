@@ -1,6 +1,5 @@
 package com.cookpad.controllers;
 
-import com.cookpad.dto.RegisterDto;
 import com.cookpad.dto.UserDto;
 import com.cookpad.services.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,10 +26,10 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<UserDto> register (@RequestBody @Valid RegisterDto registerDto) {
+    public ResponseEntity<UserDto> register (@RequestBody @Valid UserDto UserDto) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(authService.register(registerDto));
+                .body(authService.register(UserDto));
     }
 
     @PostMapping(path = "/logout")
