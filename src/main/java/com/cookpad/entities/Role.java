@@ -1,13 +1,13 @@
 package com.cookpad.entities;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 
-@Setter
-@Getter
+@Data
 @NoArgsConstructor
 @Entity
 @Table(name = "roles")
