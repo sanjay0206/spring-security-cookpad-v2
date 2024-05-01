@@ -38,6 +38,7 @@ public class RecipeDtoV2 {
 
     private String imageUrl;
 
+    // Added Nutrition also to Recipe in response in V2
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private NutritionDto nutrition;
 
