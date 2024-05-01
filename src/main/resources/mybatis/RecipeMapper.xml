@@ -10,7 +10,7 @@
         ORDER BY r.recipe_name;
     </select>
 
-    <resultMap id="RecipeWithNutritionResultMap" type="com.cookpad.responses.RecipeWithNutritionResponse">
+    <resultMap id="RecipeWithNutritionResultMap" type="com.cookpad.responses.RecipePreviewResponse">
         <result property="id" column="recipe_id"/>
         <result property="name" column="recipe_name"/>
         <result property="type" column="recipe_type"/>

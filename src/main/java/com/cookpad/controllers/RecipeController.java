@@ -39,25 +39,25 @@ public class RecipeController {
         return recipeService.getAllRecipes(pageNo, pageSize, sortBy, sortDir);
     }
 
-    @PreAuthorize("hasAuthority('SCOPE_recipe:read')")
+    @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/api/v1/recipes/recipes-preview")
     public List<RecipePreviewResponse> getAllRecipesPreview() {
         return recipeService.getAllRecipesPreview();
     }
 
-    @PreAuthorize("hasAuthority('SCOPE_recipe:read')")
+    @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping(value = "/api/recipes/{recipeId}", produces = "application/vnd.cookpad.v1+json")
     public ResponseEntity<RecipeDto> getRecipeByIdContentNegotiation(@PathVariable Long recipeId) {
         return ResponseEntity.ok(recipeService.getRecipeById(recipeId));
     }
 
-    @PreAuthorize("hasAuthority('SCOPE_recipe:read')")
+    @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping(value = "/api/recipes/{recipeId}", headers = "X-API-VERSION=1")
     public ResponseEntity<RecipeDto> getRecipeByIdHeader(@PathVariable Long recipeId) {
         return ResponseEntity.ok(recipeService.getRecipeById(recipeId));
     }
 
-    @PreAuthorize("hasAuthority('SCOPE_recipe:read')")
+    @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping(value = "/api/recipes/{recipeId}", params = "version=2")
     public ResponseEntity<RecipeDtoV2> getRecipeByIdParam(@PathVariable Long recipeId) {
         RecipeDto recipeDto = recipeService.getRecipeById(recipeId);
@@ -80,19 +80,19 @@ public class RecipeController {
         return ResponseEntity.ok(recipeDtoV2);
     }
 
-    @PreAuthorize("hasAuthority('SCOPE_recipe:create')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/api/v1/recipes/add-recipe")
     public RecipeDto createRecipe(@RequestBody @Valid RecipeDto recipeDto) {
         return recipeService.createRecipe(recipeDto);
     }
 
-    @PreAuthorize("hasAuthority('SCOPE_recipe:update')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/api/v1/recipes/update-recipe/{recipeId}")
     public ResponseEntity<RecipeDto> updateRecipe(@PathVariable Long recipeId, @RequestBody RecipeDto RecipeDto) {
         return ResponseEntity.ok(recipeService.updateRecipe(recipeId, RecipeDto));
     }
 
-    @PreAuthorize("hasAuthority('SCOPE_recipe:delete')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/api/v1/recipes/delete-recipe/{recipeId}")
     public ResponseEntity<Void> deleteRecipe(@PathVariable Long recipeId) {
         recipeService.deleteRecipe(recipeId);

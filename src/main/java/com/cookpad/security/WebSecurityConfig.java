@@ -26,14 +26,15 @@ import java.util.Collections;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @Slf4j
 public class WebSecurityConfig {
-    private final JWTTokenProvider tokenProvider;
+
     private final CustomUserDetailsService userDetailsService;
+    private final JWTTokenProvider tokenProvider;
     private final AppConfig appConfig;
     private final ObjectMapper mapper;
 
     @Autowired
-    public WebSecurityConfig(JWTTokenProvider tokenProvider,
-                             CustomUserDetailsService userDetailsService,
+    public WebSecurityConfig(CustomUserDetailsService userDetailsService,
+                             JWTTokenProvider tokenProvider,
                              AppConfig appConfig,
                              ObjectMapper mapper) {
         this.tokenProvider = tokenProvider;
