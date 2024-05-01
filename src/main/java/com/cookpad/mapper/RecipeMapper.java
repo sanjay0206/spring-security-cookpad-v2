@@ -1,6 +1,6 @@
 package com.cookpad.mapper;
 
-import com.cookpad.responses.RecipeWithNutritionResponse;
+import com.cookpad.responses.RecipePreviewResponse;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -9,6 +9,6 @@ import java.util.List;
 public interface RecipeMapper {
 
     // Method to get recipes with their corresponding nutrition information
-    List<RecipeWithNutritionResponse> getRecipesWithNutrition();
+    List<RecipePreviewResponse> getRecipesWithNutrition();
 
 }

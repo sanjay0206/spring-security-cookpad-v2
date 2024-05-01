@@ -31,6 +31,18 @@ public class NutritionServiceImpl implements NutritionService {
 
 
     @Override
+    public NutritionDto getNutritionById(Long recipeId) {
+        Recipe recipe = recipeRepository.findById(recipeId)
+                .orElseThrow(() -> new ResourceNotFoundException("Recipe", "recipeId", recipeId));
+
+        if (recipe.getNutrition() == null) {
+            throw new RecipeAPIException(HttpStatus.BAD_REQUEST, "No nutrition record is present for Recipe ID: " + recipeId);
+        }
+
+        return mapToDTO(recipe.getNutrition());
+    }
+
+    @Override
     public NutritionDto createNutrition(Long recipeId, NutritionDto nutritionDto) {;
         log.info("recipeId: "  + recipeId);
         log.info("nutritionDto: "  + nutritionDto);
@@ -78,9 +90,7 @@ public class NutritionServiceImpl implements NutritionService {
             existingNutrition.setFiber(nutritionDto.getFiber());
         }
 
-        Nutrition updatedNutrition = nutritionRepository.save(existingNutrition);
-
-        return mapToDTO(updatedNutrition);
+       return mapToDTO(nutritionRepository.save(existingNutrition));
     }
 
     @Override

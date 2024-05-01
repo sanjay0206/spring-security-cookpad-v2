@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RecipeWithNutritionResponse {
+public class RecipePreviewResponse {
     private Long id; // Recipe ID
     private String name; // Recipe name
     private RecipeType type; // Recipe type

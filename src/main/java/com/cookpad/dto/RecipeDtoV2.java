@@ -2,6 +2,7 @@ package com.cookpad.dto;
 
 
 import com.cookpad.entities.enums.RecipeType;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,7 +13,7 @@ import javax.validation.constraints.Size;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RecipeDto {
+public class RecipeDtoV2 {
 
     private Long recipeId;
 
@@ -36,6 +37,9 @@ public class RecipeDto {
     private String cookingMethod;
 
     private String imageUrl;
+
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private NutritionDto nutrition;
 
 }
 

@@ -14,19 +14,19 @@ public class NutritionController {
     @Autowired
     private NutritionService nutritionService;
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('SCOPE_recipe:create')")
     @PostMapping("/add-nutrition")
     public NutritionDto createNutrition(@PathVariable Long recipeId, @RequestBody NutritionDto nutritionDto) {
         return nutritionService.createNutrition(recipeId, nutritionDto);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('SCOPE_recipe:update')")
     @PutMapping("/update-nutrition")
     public ResponseEntity<NutritionDto> updateNutrition(@PathVariable Long recipeId, @RequestBody NutritionDto nutritionDto) {
         return ResponseEntity.ok(nutritionService.updateNutrition(recipeId, nutritionDto));
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('SCOPE_recipe:delete')")
     @DeleteMapping("/delete-nutrition")
     public ResponseEntity<Void> deleteNutrition(@PathVariable Long recipeId) {
         nutritionService.deleteNutrition(recipeId);
