@@ -117,7 +117,7 @@ public class RecipeServiceImpl implements RecipeService {
         if (recipeDto.getCookingMethod() != null) {
             existingRecipe.setCookingMethod(recipeDto.getCookingMethod());
         }
-
+        existingRecipe.setModifiedAt(LocalDateTime.now());
 
         return mapToDTO(recipeRepository.save(existingRecipe));
     }
